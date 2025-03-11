@@ -1,0 +1,30 @@
+{{- if and .Values.prometheus.rules.enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "url-monitor.fullname" . }}-rules
+  labels:
+    {{- include "url-monitor.labels" . | nindent 4 }}
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    release: prometheus
+spec:
+  groups:
+  - name: url-monitor.rules
+    rules:
+    - alert: URLDown
+      expr: sample_external_url_up == 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "URL {{ "{{" }} $labels.url {{ "}}" }} is down"
+        description: "{{ "{{" }} $labels.url {{ "}}" }} has been returning non-200 status for 5 minutes"
+    - alert: SlowResponseTime
+      expr: sample_external_url_response_ms > 1000
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "URL {{ "{{" }} $labels.url {{ "}}" }} is responding slowly"
+        description: "{{ "{{" }} $labels.url {{ "}}" }} response time is {{ "{{" }} $value {{ "}}" }}ms (>1000ms) for the last 5 minutes"
+{{- end }}
