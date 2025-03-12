@@ -26,7 +26,7 @@ The service exposes the following metrics:
 
 ## Deployment Steps
 
-## 1. Build and Push the Docker Image or use the pre-built image `ghcr.io/kirilyotov/health-monitoring:latest`
+## 1. Build and Push the Docker Image or use the pre-built image `ghcr.io/kirilyotov/health-monitoring:latest` or `kiplayo/health-monitoring` in docker hub
 
 ## 2. Deploy the Prometheus Operator to Kubernetes
 
@@ -40,4 +40,10 @@ The service exposes the following metrics:
 
 ```bash
     helm install url-monitoring ./url-monitoring
+```
+
+### To use `kiplayo/health-monitoring` 
+
+``` bash
+    helm install url-monitoring ./url-monitoring --set image.repository=kiplayo/health-monitoring
 ```

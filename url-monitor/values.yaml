@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: kiplayo/health-monitoring
+  repository: ghcr.io/kirilyotov/health-monitoring
   pullPolicy: IfNotPresent
   tag: "latest"
 service:
